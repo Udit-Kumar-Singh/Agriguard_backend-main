@@ -35,36 +35,8 @@ CORS(app)
 
 @app.route("/test", methods = ["GET"])
 def test():
-    return response_payload(True, message="Hello World Crop Prediction model ka backend start ho chukaa hai",data=None)
+    return response_payload(True,"Hello World Crop Prediction model ka backend start ho chukaa hai")
 
-@app.route("/search/<body>", methods = ["GET"])
-def search(body):
-    body = "solution for "+ body
-    resp = farmers_log(query = {"log":body,  "lang":"en"})
-    response = resp["data"]["organic_result_1"]["response"]
-    if(response == ""):
-        response = "Sorry, we could not find any solution for your problem"
-    return response_payload(True,{
-        "response":response
-    } ,"Working")
-
-@app.route("/farmers-log", methods = ["POST"])
-def farmers_log(query = None):
-    if query == None:
-        data, form_valid = check_form_data()
-    else:
-        data,form_valid = query, 1
-    if form_valid == 0:
-        return response_payload(False, msg= data)
-    log = data.get("log")
-    lang = data.get("lang")
-    print('Log is : ', log)
-    if lang == None:
-        lang = "en"
-    if not log:
-        return response_payload(False, msg="No log provided")
-    search_result = search_log(log,lang)
-    return response_payload(True,search_result, "Success search")
 
 
 def check_form_data():
@@ -116,6 +88,7 @@ def crop_recommedation():
         
     except Exception:
         return response_payload(False, msg="Request body is not valid")
+    
 @app.route('/fertilizer-predict', methods = ["POST"])
 def predict_fertilizer():
     data, form_valid = check_form_data()
@@ -177,14 +150,6 @@ def predict_fertilizer():
         print(e)
         return response_payload(False, msg="Request body is not valid")
 
-
-def response_payload(success, data, message):
-    response = {
-        "success": success,
-        "data": data,
-        "message": message
-    }
-    return jsonify(response)
 
 @app.route('/disease-predict/<lang>', methods=['GET', 'POST'])
 def disease_prediction(lang):
