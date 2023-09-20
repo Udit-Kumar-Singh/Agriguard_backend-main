@@ -3,13 +3,15 @@ import numpy as np
 from botocore.client import Config
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
+# from gtts import gTTS
+# from twilio.rest import Client
 
 # from config import ACCESS_KEY_ID, ACCESS_SECRET_KEY, BUCKET_NAME, config
 from config import config
 from crop_recommendation.corp_prediction import recommend_crop
 from crop_recommendation.weather import weather_fetch
 from disease_classifier.classify_disease import predict_image
+# from farmers_log.search_user_request import search_log
 from fertilizier_predict.crop_type_encoder import encode_crop_type
 from fertilizier_predict.decode_fertilizer import decode_fertilizer
 from fertilizier_predict.fertilizer_report import generate_fertilizer_report
@@ -31,7 +33,7 @@ CORS(app)
     # Cultivation
     # Harvest
 
-@app.route("/", methods = ["GET"])
+@app.route("/test", methods = ["GET"])
 def test():
     return response_payload(True, "Hello World Crop Prediction model ka backend start ho chukaa hai")
 
@@ -176,6 +178,13 @@ def predict_fertilizer():
         return response_payload(False, msg="Request body is not valid")
 
 
+def response_payload(success, data, message):
+    response = {
+        "success": success,
+        "data": data,
+        "message": message
+    }
+    return jsonify(response)
 
 @app.route('/disease-predict/<lang>', methods=['GET', 'POST'])
 def disease_prediction(lang):

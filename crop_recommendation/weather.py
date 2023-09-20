@@ -7,13 +7,12 @@ def weather_fetch(city_name):
     :params: city_name
     :return: temperature, humidity
     """
-    api_key =   "9d7cde1f6d07ec55650544be1631307e"
+    api_key =   "d1845658f92b31c64bd94f06f7188c9c"
     base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
     complete_url = base_url + "appid=" + api_key + "&q=" + city_name
     response = requests.get(complete_url)
     api_response = response.json()
-
     if api_response["cod"] != "404":
         main_extract = api_response["main"]
 
