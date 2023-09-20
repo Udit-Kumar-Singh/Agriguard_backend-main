@@ -35,7 +35,7 @@ CORS(app)
 
 @app.route("/test", methods = ["GET"])
 def test():
-    return response_payload(True, "Hello World Crop Prediction model ka backend start ho chukaa hai")
+    return response_payload(True, message="Hello World Crop Prediction model ka backend start ho chukaa hai",data=None)
 
 @app.route("/search/<body>", methods = ["GET"])
 def search(body):
