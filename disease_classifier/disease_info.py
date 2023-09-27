@@ -1,19 +1,7 @@
 from localization.translator import translate_text_to_language
 
 
-def get_disease_recommendation(index, lang):
-    return {
-        "disease_name": translate_text_to_language(main_dic[index]["disease_name"], lang, "en"),
-       "causes":{
-       "1": translate_text_to_language(main_dic[index]["causes"]["1"], lang, "en"),
-         "2": translate_text_to_language(main_dic[index]["causes"]["2"], lang, "en"), 
-       },
-         "prevent":{
-         "1": translate_text_to_language(main_dic[index]["prevent"]["1"], lang, "en"),
-            "2": translate_text_to_language(main_dic[index]["prevent"]["2"], lang, "en"),
-            "3": translate_text_to_language(main_dic[index]["prevent"]["3"], lang, "en"),
-            },
-    }
+
     
 
 main_dic = {
@@ -484,3 +472,18 @@ main_dic = {
             
 
 }
+
+def get_disease_recommendation(index, lang='en'):
+    print("Entry in disease info")
+    return {
+        "disease_name": translate_text_to_language(main_dic[index]["disease_name"], lang, "en"),
+       "causes":{
+       "1": translate_text_to_language(main_dic[index]["causes"]["1"], lang, "en"),
+         "2": translate_text_to_language(main_dic[index]["causes"]["2"], lang, "en"), 
+       },
+         "prevent":{
+         "1": translate_text_to_language(main_dic[index]["prevent"]["1"], lang, "en"),
+            "2": translate_text_to_language(main_dic[index]["prevent"]["2"], lang, "en"),
+            "3": translate_text_to_language(main_dic[index]["prevent"]["3"], lang, "en"),
+            },
+    }

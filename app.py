@@ -10,6 +10,7 @@ from flask_cors import CORS
 from config import config
 from crop_recommendation.corp_prediction import recommend_crop
 from crop_recommendation.weather import weather_fetch
+from disease_classifier.disease_info import get_disease_recommendation
 from disease_classifier.classify_disease import predict_image
 # from farmers_log.search_user_request import search_log
 from fertilizier_predict.crop_type_encoder import encode_crop_type
@@ -148,35 +149,62 @@ def predict_fertilizer():
         
     except Exception as e:
         print(e)
-        return response_payload(False, msg="Request body is not valid")
+        return response_payload(False, msg="Request body is not valid") 
 
-
-@app.route('/disease-predict/<lang>', methods=['GET', 'POST'])
+@app.route('/disease-predict/<lang>', methods=['POST'])
 def disease_prediction(lang):
     if request.method == 'POST':
         if lang == None:
             lang = "en"
 
-
         if 'file' not in request.files:
             return response_payload(False, 'Please select a file')
         file = request.files.get('file')
         if not file:
-            return response_payload(False, 'Please select a file. Make sure there is  file')
+            return response_payload(False, 'Please select a file. Make sure there is a file')
         try:
             img = file.read()
 
-            prediction = predict_image(img)
-            recommendation_result = {
-                    "prediction": translate_text_to_language(prediction, lang, "en"),
-                }
-            print(prediction)
-            return response_payload(True, recommendation_result, "Success prediction")
-            
+            # Classify the disease here, replace 'prediction' with your actual classification logic
+            disease_classification = predict_image(img)
+
+            # Fetch disease information based on the classification
+            disease_info = get_disease_recommendation(disease_classification, lang)
+            # print(disease_info)
+
+            return response_payload(True, disease_info, "Success prediction")
+
         except Exception as e:
             print(e)
             pass
-    return response_payload(False, 'Please try again')     
+    return response_payload(False, 'Please try again')
+
+# @app.route('/disease-predict/<lang>', methods=['GET', 'POST'])
+# def disease_prediction(lang):
+#     if request.method == 'POST':
+#         if lang == None:
+#             lang = "en"
+
+
+#         if 'file' not in request.files:
+#             return response_payload(False, 'Please select a file')
+#         file = request.files.get('file')
+#         if not file:
+#             return response_payload(False, 'Please select a file. Make sure there is  file')
+#         try:
+#             img = file.read()
+
+#             prediction = predict_image(img)
+#             recommendation_result = {
+#                     "prediction": translate_text_to_language(prediction, lang, "en"),
+#                 }
+#             print(prediction)
+#             return response_payload(True, recommendation_result, "Success prediction")
+            
+#         except Exception as e:
+#             print(e)
+#             pass
+#     return response_payload(False, 'Please try again')     
 
 
 def page_not_found(error):
